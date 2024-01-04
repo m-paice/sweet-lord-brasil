@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import Slider from "@react-native-community/slider";
+import { StatusBar } from "expo-status-bar";
+import { Image } from "expo-image";
+import { Audio, InterruptionModeAndroid } from "expo-av";
 import {
   View,
   TouchableOpacity,
@@ -6,15 +10,19 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { Audio } from "expo-av";
-import { Image } from "expo-image";
-import Slider from "@react-native-community/slider";
+
 import { ThemedText } from "./components/Themed";
 import { Icon } from "./components/Icon";
-
 import Logo from "./assets/sl-logo.jpg";
 import { Box } from "./components/Box";
 import { API_KEY_LAST_FM } from "./constants/lastfm";
+
+Audio.setAudioModeAsync({
+  staysActiveInBackground: true,
+  interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+  shouldDuckAndroid: true,
+  playThroughEarpieceAndroid: true,
+});
 
 const App = () => {
   const [sound, setSound] = useState();
@@ -31,9 +39,10 @@ const App = () => {
       const { sound } = await Audio.Sound.createAsync({
         uri: "https://srv5.voxon.top:7010/stream/",
       });
+      await sound.playAsync();
+
       setLoadSound(false);
       setSound(sound);
-      sound.playAsync();
       setIsPlaying(true);
     };
 
@@ -63,7 +72,7 @@ const App = () => {
           fetch(API_URL)
             .then((response) => response.json())
             .then((data) => {
-              const capaAlbum = data.track.album.image[3]["#text"];
+              const capaAlbum = data?.track?.album?.image?.[3]?.["#text"] || "";
               setAlbumCover(capaAlbum);
             });
         });
@@ -101,6 +110,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       <View style={styles.header}>
         <Image source={Logo} width={50} height={50} />
         <ThemedText size="lg" color="secondary">
@@ -119,7 +129,11 @@ const App = () => {
         </View>
 
         <View style={styles.spacing}>
-          <Image source={{ uri: albumCover }} width="100%" height={300} />
+          {albumCover ? (
+            <Image source={{ uri: albumCover }} width="100%" height={300} />
+          ) : (
+            <Image source={Logo} width="100%" height={300} />
+          )}
           <View style={styles.spacing}>
             <ThemedText color="secondary" size="md">
               {name}
@@ -168,7 +182,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#020024",
-    padding: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 20,
   },
 
   header: {
