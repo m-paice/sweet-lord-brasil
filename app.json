@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sl-app",
-    "slug": "sl-app",
+    "name": "Sweet Lord Brasil",
+    "slug": "radio-sweet-lord-brasil",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,22 +9,26 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#000"
+      },
+      "package": "com.mpaice.radiosweetlordbrasil"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6af553da-8d31-4677-ba66-e5f107f301c0"
+      }
     }
   }
 }
