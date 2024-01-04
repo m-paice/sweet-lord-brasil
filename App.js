@@ -3,6 +3,7 @@ import Slider from "@react-native-community/slider";
 import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { Audio, InterruptionModeAndroid } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
   TouchableOpacity,
@@ -109,83 +110,95 @@ const App = () => {
   const [artist, name] = songName.split(" - ");
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <View style={styles.header}>
-        <Image source={Logo} width={50} height={50} />
-        <ThemedText size="lg" color="secondary">
-          Sweet Lord Brasil
-        </ThemedText>
-      </View>
-
-      <ScrollView>
-        <View style={styles.spacing}>
-          <ThemedText size="md" center>
-            Special Classic
-          </ThemedText>
-          <ThemedText size="sm" center>
-            19:00 - 21:00
-          </ThemedText>
-        </View>
-
-        <View style={styles.spacing}>
-          {albumCover ? (
-            <Image source={{ uri: albumCover }} width="100%" height={300} />
-          ) : (
-            <Image source={Logo} width="100%" height={300} />
-          )}
-          <View style={styles.spacing}>
-            <ThemedText color="secondary" size="md">
-              {name}
-            </ThemedText>
-            <ThemedText color="secondary" size="sm">
-              {artist}
-            </ThemedText>
-          </View>
-
-          <View style={{ marginVertical: 40, alignItems: "center" }}>
-            {loadSound ? (
-              <ActivityIndicator color="#FBF2C0" size={30} />
-            ) : isPlaying ? (
-              <TouchableOpacity onPress={pauseSound}>
-                <Icon size={80} name="pause" color="secondary" />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={playSound}>
-                <Icon size={80} name="play" color="secondary" />
-              </TouchableOpacity>
-            )}
-          </View>
-          <Slider
-            style={{ width: "100%", height: 40 }}
-            minimumValue={0}
-            maximumValue={1}
-            thumbTintColor="#FBF2C0"
-            maximumTrackTintColor="#FBF2C0"
-            minimumTrackTintColor="#FBF2C0"
-            value={volume}
-            step={0.1}
-            onValueChange={handleVolumeChange}
+    <LinearGradient
+      colors={["#3b2e50", "#3c1515", "#160105"]}
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <View style={styles.header}>
+          <Image
+            source={Logo}
+            width={50}
+            height={50}
+            style={{ borderRadius: 50 }}
           />
+          <ThemedText size="lg" color="secondary">
+            Sweet Lord Brasil
+          </ThemedText>
         </View>
-        <Box row center gap={30}>
-          <Icon size={40} name="instagram" color="secondary" />
-          <Icon size={40} name="facebook" color="secondary" />
-          <Icon size={40} name="youtube" color="secondary" />
-        </Box>
-      </ScrollView>
-    </View>
+
+        <ScrollView>
+          <View style={styles.spacing}>
+            <ThemedText size="md" center>
+              Special Classic
+            </ThemedText>
+            <ThemedText size="sm" center>
+              19:00 - 21:00
+            </ThemedText>
+          </View>
+
+          <View style={styles.spacing}>
+            {albumCover ? (
+              <Image source={{ uri: albumCover }} width="100%" height={300} />
+            ) : (
+              <Image source={Logo} width="100%" height={300} />
+            )}
+            <View style={styles.spacing}>
+              <ThemedText color="secondary" size="md">
+                {name}
+              </ThemedText>
+              <ThemedText color="secondary" size="sm">
+                {artist}
+              </ThemedText>
+            </View>
+
+            <View style={{ marginVertical: 40, alignItems: "center" }}>
+              {loadSound ? (
+                <ActivityIndicator color="#FBF2C0" size={30} />
+              ) : isPlaying ? (
+                <TouchableOpacity onPress={pauseSound}>
+                  <Icon size={80} name="pause" color="secondary" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={playSound}>
+                  <Icon size={80} name="play" color="secondary" />
+                </TouchableOpacity>
+              )}
+            </View>
+            <Slider
+              style={{ width: "100%", height: 40 }}
+              minimumValue={0}
+              maximumValue={1}
+              thumbTintColor="#FBF2C0"
+              maximumTrackTintColor="#FBF2C0"
+              minimumTrackTintColor="#FBF2C0"
+              value={volume}
+              step={0.1}
+              onValueChange={handleVolumeChange}
+            />
+          </View>
+          <Box row center gap={30}>
+            <Icon size={40} name="instagram" color="secondary" />
+            <Icon size={40} name="facebook" color="secondary" />
+            <Icon size={40} name="youtube" color="secondary" />
+          </Box>
+        </ScrollView>
+      </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#020024",
+
     paddingVertical: 40,
     paddingHorizontal: 20,
   },
-
+  background: {
+    flex: 1,
+  },
   header: {
     display: "flex",
     flexDirection: "row",
