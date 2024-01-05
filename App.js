@@ -1,33 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Slider from "@react-native-community/slider";
 import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
-import { Audio, InterruptionModeAndroid } from "expo-av";
+import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   ActivityIndicator,
   Linking,
 } from "react-native";
 
 import { ThemedText } from "./components/Themed";
 import { Icon } from "./components/Icon";
-import Logo from "./assets/sl-logo.jpg";
 import { Box } from "./components/Box";
 import { API_KEY_LAST_FM } from "./constants/lastfm";
+import Logo from "./assets/sl-logo.jpg";
 
 Audio.setAudioModeAsync({
   staysActiveInBackground: true,
-  interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-  shouldDuckAndroid: true,
-  playThroughEarpieceAndroid: true,
 });
 
 const App = () => {
-  const [sound, setSound] = useState();
+  const sound = useRef(new Audio.Sound());
+
   const [loadSound, setLoadSound] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1.0);
@@ -38,19 +35,21 @@ const App = () => {
     const loadSound = async () => {
       setLoadSound(true);
 
-      const { sound } = await Audio.Sound.createAsync({
-        uri: "https://srv5.voxon.top:7010/stream/",
-      });
+      const status = await sound.current.loadAsync(
+        { uri: "https://srv5.voxon.top:7010/stream/" },
+        { shouldPlay: isPlaying }
+      );
 
-      setLoadSound(false);
-      setSound(sound);
+      if (status.isLoaded) {
+        setLoadSound(false);
+      }
     };
 
     loadSound();
 
     return () => {
-      if (sound) {
-        sound.unloadAsync();
+      if (sound.current) {
+        sound.current.unloadAsync();
       }
     };
   }, []);
@@ -86,23 +85,23 @@ const App = () => {
   }, []);
 
   const playSound = async () => {
-    if (sound) {
-      await sound.playAsync();
+    if (sound.current) {
+      await sound.current.playAsync();
       setIsPlaying(true);
     }
   };
 
   const pauseSound = async () => {
-    if (sound) {
-      await sound.pauseAsync();
+    if (sound.current) {
+      await sound.current.pauseAsync();
       setIsPlaying(false);
     }
   };
 
   const handleVolumeChange = (value) => {
     setVolume(value);
-    if (sound) {
-      sound.setVolumeAsync(value);
+    if (sound.current) {
+      sound.current.setVolumeAsync(value);
     }
   };
 
@@ -127,11 +126,11 @@ const App = () => {
       </View>
       <View style={{ flex: 1, justifyContent: "space-around" }}>
         <View>
+          <ThemedText size="sm" center>
+            Agora no ar
+          </ThemedText>
           <ThemedText size="md" center>
             Special Classic
-          </ThemedText>
-          <ThemedText size="sm" center>
-            19:00 - 21:00
           </ThemedText>
         </View>
 
@@ -152,7 +151,7 @@ const App = () => {
 
           <View style={{ marginVertical: 40, alignItems: "center" }}>
             {loadSound ? (
-              <ActivityIndicator color="#FBF2C0" size={30} />
+              <ActivityIndicator color="#FBF2C0" size={80} />
             ) : isPlaying ? (
               <TouchableOpacity onPress={pauseSound}>
                 <Icon size={80} name="pause" color="secondary" />
