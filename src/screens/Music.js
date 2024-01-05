@@ -10,6 +10,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Linking,
+  Text,
 } from "react-native";
 
 import { ThemedText } from "../components/Themed";
@@ -113,6 +114,9 @@ export const Music = () => {
       style={styles.background}
     >
       <StatusBar style="light" />
+      <Text style={{ textAlign: "right", color: "#fff" }}>
+        {require("../../package.json").version}
+      </Text>
       <View style={styles.header}>
         <Image
           source={Logo}
@@ -172,7 +176,7 @@ export const Music = () => {
             </ThemedText>
           </View>
 
-          <View style={{ marginVertical: 40, alignItems: "center" }}>
+          <View style={{ marginVertical: 20, alignItems: "center" }}>
             {loadSound ? (
               <ActivityIndicator color="#FBF2C0" size={80} />
             ) : isPlaying ? (
