@@ -13,6 +13,8 @@ export const ThemedText = ({
         return "#fff";
       case "secondary":
         return "#E62948";
+      case "tertiary":
+        return "#FBF2C0";
 
       default:
         return "#333";
@@ -21,6 +23,8 @@ export const ThemedText = ({
 
   const getSize = (themeSize) => {
     switch (themeSize) {
+      case "xsm":
+        return 16;
       case "sm":
         return 20;
       case "md":
