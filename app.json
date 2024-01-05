@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sweet Lord Brasil",
     "slug": "radio-sweet-lord-brasil",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,16 +11,26 @@
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mpaice.radiosweetlordbrasil"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000"
       },
-      "versionCode": 7,
+      "versionCode": 8,
       "package": "com.mpaice.radiosweetlordbrasil"
     },
     "web": {

@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Notifications from "expo-notifications";
 import {
   View,
   TouchableOpacity,
@@ -88,6 +89,14 @@ export const Music = () => {
   const playSound = async () => {
     if (sound.current) {
       await sound.current.playAsync();
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Radio Sweet Lord Brasil",
+          body: "A música está tocando!",
+          data: {},
+        },
+        trigger: null,
+      });
       setIsPlaying(true);
     }
   };
@@ -95,6 +104,7 @@ export const Music = () => {
   const pauseSound = async () => {
     if (sound.current) {
       await sound.current.pauseAsync();
+
       setIsPlaying(false);
     }
   };
