@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Slider from "@react-native-community/slider";
-import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
@@ -123,7 +122,6 @@ export const Music = () => {
       colors={["#3b2e50", "#3c1515", "#160105"]}
       style={styles.background}
     >
-      <StatusBar style="light" />
       <Text style={{ textAlign: "right", color: "#fff" }}>
         {require("../../package.json").version}
       </Text>

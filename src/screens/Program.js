@@ -1,5 +1,4 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, StyleSheet, Linking, ScrollView } from "react-native";
@@ -60,7 +59,6 @@ export const Program = () => {
       colors={["#3b2e50", "#3c1515", "#160105"]}
       style={styles.background}
     >
-      <StatusBar style="light" />
       <View style={styles.header}>
         <Image
           source={Logo}
