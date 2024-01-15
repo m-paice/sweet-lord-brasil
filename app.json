@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sweet Lord Brasil",
     "slug": "radio-sweet-lord-brasil",
-    "version": "1.0.8",
+    "version": "1.0.11",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -30,7 +30,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000"
       },
-      "versionCode": 8,
+      "versionCode": 11,
       "package": "com.mpaice.radiosweetlordbrasil"
     },
     "web": {

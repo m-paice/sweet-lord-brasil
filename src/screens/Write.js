@@ -7,6 +7,7 @@ import { ThemedText } from "../components/Themed";
 import { Icon } from "../components/Icon";
 import { Box } from "../components/Box";
 import Logo from "../../assets/sl-logo.jpg";
+import { Header } from "../components/Header";
 
 export const Write = () => {
   return (
@@ -14,43 +15,7 @@ export const Write = () => {
       colors={["#3b2e50", "#3c1515", "#160105"]}
       style={styles.background}
     >
-      <View style={styles.header}>
-        <Image
-          source={Logo}
-          width={50}
-          height={50}
-          style={{ borderRadius: 50 }}
-        />
-        <ThemedText size="lg" color="secondary">
-          Sweet Lord Brasil
-        </ThemedText>
-      </View>
-      <Box row center gap={30}>
-        <Icon
-          onPress={() =>
-            Linking.openURL("https://www.instagram.com/radiosweetlord")
-          }
-          size={25}
-          name="instagram"
-          color="secondary"
-        />
-        <Icon
-          onPress={() =>
-            Linking.openURL("https://www.facebook.com/radiosweetlord")
-          }
-          size={25}
-          name="facebook"
-          color="secondary"
-        />
-        <Icon
-          onPress={() =>
-            Linking.openURL("https://www.youtube.com/@radiosweetlord7115")
-          }
-          size={25}
-          name="youtube"
-          color="secondary"
-        />
-      </Box>
+      <Header />
       <View style={{ marginTop: 20 }}>
         <ThemedText size="md">Peça sua música favorita</ThemedText>
         <ThemedText size="sm" color="secondary">

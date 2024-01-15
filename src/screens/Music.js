@@ -9,18 +9,23 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Linking,
-  Text,
 } from "react-native";
 
 import { ThemedText } from "../components/Themed";
 import { Icon } from "../components/Icon";
-import { Box } from "../components/Box";
+
 import { API_KEY_LAST_FM } from "../constants/lastfm";
 import Logo from "../../assets/sl-logo.jpg";
+import { Header } from "../components/Header";
 
 Audio.setAudioModeAsync({
+  allowsRecordingIOS: false,
   staysActiveInBackground: true,
+  interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
+  playsInSilentModeIOS: true,
+  shouldDuckAndroid: true,
+  interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+  playThroughEarpieceAndroid: false,
 });
 
 export const Music = () => {
@@ -122,46 +127,7 @@ export const Music = () => {
       colors={["#3b2e50", "#3c1515", "#160105"]}
       style={styles.background}
     >
-      <Text style={{ textAlign: "right", color: "#fff" }}>
-        {require("../../package.json").version}
-      </Text>
-      <View style={styles.header}>
-        <Image
-          source={Logo}
-          width={50}
-          height={50}
-          style={{ borderRadius: 50 }}
-        />
-        <ThemedText size="lg" color="secondary">
-          Sweet Lord Brasil
-        </ThemedText>
-      </View>
-      <Box row center gap={30}>
-        <Icon
-          onPress={() =>
-            Linking.openURL("https://www.instagram.com/radiosweetlord")
-          }
-          size={25}
-          name="instagram"
-          color="secondary"
-        />
-        <Icon
-          onPress={() =>
-            Linking.openURL("https://www.facebook.com/radiosweetlord")
-          }
-          size={25}
-          name="facebook"
-          color="secondary"
-        />
-        <Icon
-          onPress={() =>
-            Linking.openURL("https://www.youtube.com/@radiosweetlord7115")
-          }
-          size={25}
-          name="youtube"
-          color="secondary"
-        />
-      </Box>
+      <Header />
       <View style={{ flex: 1, justifyContent: "space-around" }}>
         <View>
           <ThemedText size="md" center>
