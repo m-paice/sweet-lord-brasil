@@ -1,12 +1,8 @@
 import React from "react";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, StyleSheet, Linking, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, Button } from "react-native";
 
 import { ThemedText } from "../components/Themed";
-import { Icon } from "../components/Icon";
-import { Box } from "../components/Box";
-import Logo from "../../assets/sl-logo.jpg";
 import { Header } from "../components/Header";
 
 export const Write = () => {
@@ -22,6 +18,35 @@ export const Write = () => {
           Preencha os campos abaixo
         </ThemedText>
       </View>
+
+      <View style={styles.wrapperInput}>
+        <ThemedText size="sm"> Seu nome </ThemedText>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu nome aqui..."
+          placeholderTextColor="gray"
+        ></TextInput>
+      </View>
+
+      <View style={styles.wrapperInput}>
+        <ThemedText size="sm"> Nome da música </ThemedText>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o nome da música aqui..."
+          placeholderTextColor="gray"
+        ></TextInput>
+      </View>
+
+      <View style={styles.wrapperInput}>
+        <ThemedText size="sm"> Nome do artísta </ThemedText>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite o nome do artísta aqui..."
+          placeholderTextColor="gray"
+        ></TextInput>
+      </View>
+
+      <Button title="Enviar pedido" color="#E62948"></Button>
     </LinearGradient>
   );
 };
@@ -32,13 +57,16 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 20,
   },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
+  wrapperInput: {
+    marginVertical: 15,
   },
-
+  input: {
+    color: "gray",
+    fontSize: 17,
+    marginLeft: 5,
+    borderBottomWidth: 1,
+    borderColor: "#fff",
+  },
   spacing: {
     marginVertical: 20,
   },

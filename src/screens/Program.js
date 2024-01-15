@@ -1,12 +1,9 @@
 import React from "react";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, StyleSheet, Linking, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 
 import { ThemedText } from "../components/Themed";
-import { Icon } from "../components/Icon";
 import { Box } from "../components/Box";
-import Logo from "../../assets/sl-logo.jpg";
 import { Header } from "../components/Header";
 
 const programations = [
@@ -102,13 +99,6 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 20,
   },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-
   spacing: {
     marginVertical: 20,
   },
