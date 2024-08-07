@@ -11,12 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
     "plugins": [
       [
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
-          "color": "#ffffff"
+          "color": "#ffffff",
+          "defaultChannel": "default"
         }
       ]
     ],
@@ -30,7 +34,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000"
       },
-      "versionCode": 12,
+      "versionCode": 13,
       "package": "com.mpaice.radiosweetlordbrasil"
     },
     "web": {

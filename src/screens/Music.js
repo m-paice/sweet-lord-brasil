@@ -1,106 +1,87 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Slider from "@react-native-community/slider";
-import { Image } from "expo-image";
-import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Notifications from "expo-notifications";
 import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
   ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { Audio } from "expo-av";
+import * as TaskManager from "expo-task-manager";
+import * as BackgroundFetch from "expo-background-fetch";
 
-import { ThemedText } from "../components/Themed";
-import { Icon } from "../components/Icon";
-
-import { API_KEY_LAST_FM } from "../constants/lastfm";
-import Logo from "../../assets/sl-logo.jpg";
 import { Header } from "../components/Header";
+import { ThemedText } from "../components/Themed";
 
-Audio.setAudioModeAsync({
-  allowsRecordingIOS: false,
-  staysActiveInBackground: true,
-  interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
-  playsInSilentModeIOS: true,
-  shouldDuckAndroid: true,
-  interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-  playThroughEarpieceAndroid: false,
+import Logo from "../../assets/sl-logo.jpg";
+import { Icon } from "../components/Icon";
+import { Image } from "expo-image";
+
+const BACKGROUND_MUSIC_TASK = "BACKGROUND_MUSIC_TASK";
+
+TaskManager.defineTask(BACKGROUND_MUSIC_TASK, async () => {
+  try {
+    const sound = new Audio.Sound();
+    await sound.loadAsync({
+      uri: "https://stm.roxcast.com.br:7036",
+    });
+    await sound.playAsync();
+    await sound.setIsLoopingAsync(true);
+    return BackgroundFetch.Result.NewData;
+  } catch (error) {
+    console.error(error);
+    return BackgroundFetch.Result.Failed;
+  }
 });
 
 export const Music = () => {
   const sound = useRef(new Audio.Sound());
 
-  const [loadSound, setLoadSound] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1.0);
-  const [songName, setSongName] = useState("");
-  const [albumCover, setAlbumCover] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loadSound = async () => {
-      setLoadSound(true);
+    (async () => {
+      try {
+        setLoading(true);
 
-      const status = await sound.current.loadAsync(
-        { uri: "https://srv5.voxon.top:7010/stream/" },
-        { shouldPlay: isPlaying }
-      );
+        await Audio.setAudioModeAsync({
+          staysActiveInBackground: true,
+          playsInSilentModeIOS: true, // No caso de Android, essa configuração não é relevante
+        });
 
-      if (status.isLoaded) {
-        setLoadSound(false);
+        await sound.current.loadAsync({
+          uri: "https://stm.roxcast.com.br:7036",
+        });
+        await sound.current.playAsync();
+        await sound.current.setIsLoopingAsync(true);
+
+        await BackgroundFetch.registerTaskAsync(BACKGROUND_MUSIC_TASK, {
+          minimumInterval: 15,
+          stopOnTerminate: false,
+          startOnBoot: true,
+        });
+
+        setIsPlaying(true);
+      } catch (error) {
+        console.error(error);
+        setIsPlaying(false);
+      } finally {
+        setLoading(false);
       }
-    };
-
-    loadSound();
+    })();
 
     return () => {
-      if (sound.current) {
-        sound.current.unloadAsync();
-      }
+      sound.current.unloadAsync();
     };
-  }, []);
-
-  useEffect(() => {
-    const soundName = async () => {
-      fetch("https://player.voxon.top/proxy/7010/currentsong?sid=1")
-        .then((response) => response.text())
-        .then((response) => {
-          setSongName(response);
-
-          const [artist, music] = response.split(" - ");
-
-          const baseURL = "http://ws.audioscrobbler.com/2.0";
-          const path = `/?method=track.getInfo&api_key=${API_KEY_LAST_FM}&artist=${artist}&track=${music}&format=json`;
-
-          const API_URL = baseURL + path;
-
-          fetch(API_URL)
-            .then((response) => response.json())
-            .then((data) => {
-              const capaAlbum = data?.track?.album?.image?.[3]?.["#text"] || "";
-              setAlbumCover(capaAlbum);
-            });
-        });
-    };
-
-    const interval = setInterval(() => {
-      soundName();
-    }, 2_000);
-
-    return () => clearInterval(interval);
   }, []);
 
   const playSound = async () => {
     if (sound.current) {
       await sound.current.playAsync();
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "Radio Sweet Lord Brasil",
-          body: "A música está tocando!",
-          data: {},
-        },
-        trigger: null,
-      });
+
       setIsPlaying(true);
     }
   };
@@ -108,7 +89,6 @@ export const Music = () => {
   const pauseSound = async () => {
     if (sound.current) {
       await sound.current.pauseAsync();
-
       setIsPlaying(false);
     }
   };
@@ -119,8 +99,6 @@ export const Music = () => {
       sound.current.setVolumeAsync(value);
     }
   };
-
-  const [artist, name] = songName.split(" - ");
 
   return (
     <LinearGradient
@@ -136,22 +114,10 @@ export const Music = () => {
         </View>
 
         <View>
-          {albumCover ? (
-            <Image source={{ uri: albumCover }} width="100%" height={250} />
-          ) : (
-            <Image source={Logo} width="100%" height={250} />
-          )}
-          <View>
-            <ThemedText color="secondary" size="md">
-              {name}
-            </ThemedText>
-            <ThemedText color="secondary" size="sm">
-              {artist}
-            </ThemedText>
-          </View>
+          <Image source={Logo} width="100%" height={250} />
 
           <View style={{ marginVertical: 20, alignItems: "center" }}>
-            {loadSound ? (
+            {loading ? (
               <ActivityIndicator color="#FBF2C0" size={80} />
             ) : isPlaying ? (
               <TouchableOpacity onPress={pauseSound}>
