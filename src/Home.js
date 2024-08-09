@@ -1,14 +1,34 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import VectorIcon from "react-native-vector-icons/FontAwesome";
+import TrackPlayer from "react-native-track-player";
 
 import { Music } from "./screens/Music";
 import { Program } from "./screens/Program";
 import { Write } from "./screens/Write";
+import { useSetupTrackPlayer } from "./hooks/useSetupTrackPlayer";
+import Icon from "../assets/icon.png";
 
 const Tab = createBottomTabNavigator();
+const sound = "https://stm.roxcast.com.br:7036";
 
 export function Home() {
+  useSetupTrackPlayer({
+    onLoad: () => {
+      TrackPlayer.add([
+        {
+          id: "trackId",
+          url: sound,
+          title: "Sweet Lord Brasil",
+          artist: "Special Classic",
+          artwork: Icon,
+        },
+      ]);
+
+      TrackPlayer.play();
+    },
+  });
+
   return (
     <Tab.Navigator
       initialRouteName="Music"
